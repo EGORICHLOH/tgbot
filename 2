@@ -1,47 +1,44 @@
 //main 
 
-
 import asyncio
 from aiogram import Bot, Dispatcher, executor
-from config import API_TOKEN
+from config import admin_id, API_TOKEN
 
 loop = asyncio.get_event_loop()
 bot = Bot(API_TOKEN, parse_mode="HTML")
 dp = Dispatcher(bot, loop=loop)
 
 if __name__ == "__main__":
-    executor.start_polling(dp, skip_updates=True)
     from handlers import dp, send_to_admin
-    executor.start_polling(dp, in_startup=send_to_admin)
+    executor.start_polling(dp, on_startup=send_to_admin)
 
 
 //config
 
 #API Token
-API_TOKEN = '1474721112:AAGI8mwKH4QVXWgtTkDV7UiHKofjvAUbi8A'
+API_TOKEN = '1494112895:AAH4GWGyPsRE_KjbgBkDNew26ASOCvq5VkE'
 
 #Admin ID
 admin_id = 635451303
-
 
 //handlers
 
 # Import library
 from main import bot, dp
+from config import API_TOKEN, admin_id
 from aiogram import types
 from aiogram.types import Message
-
-keyboard_markup = types.ReplyKeyboardMarkup(row_width=3)
-
-# Array for keyboard
-array_keyboard = [1, 2]
+from aiogram import types, Dispatcher
 
 # Send message to admin
 async def send_to_admin(dp):
-    await bot.send_message(chat_id=635451303, text="Bot start")
+    await bot.send_message(chat_id=admin_id, text="Bot start")
 
-# Function of start bot
+# Start bot using func
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
-    keyboard_markup.add(*(types.KeyboardButton(text) for text in array_keyboard))
-    await message.answer(text='Hello!', reply_markup=keyboard_markup)
+    text = f'''Привет! {message.from_user.full_name}
+Получается это бот. Получается это бот
+Для работы бота в группе необходимо дать ему права администратора и включить все разрешения .'''
+    await message.answer(text=text)
+
