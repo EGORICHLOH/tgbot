@@ -30,15 +30,26 @@ from aiogram import types
 from aiogram.types import Message
 from aiogram import types, Dispatcher
 
+
+# Keyboard Bot
+keyboard_markup = types.ReplyKeyboardMarkup(row_width=3)
+
+
+
+# Array for keyboard
+array_keyboard = ['Button1', 'Button2']
+
 # Send message to admin
 async def send_to_admin(dp):
     await bot.send_message(chat_id=admin_id, text="Bot start")
 
-# Start bot using func
+# Function of start bot
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
-    text = f'''Привет! {message.from_user.full_name}
-Получается это бот. Получается это бот
-Для работы бота в группе необходимо дать ему права администратора и включить все разрешения .'''
-    await message.answer(text=text)
+    keyboard_markup.add(*(types.KeyboardButton(text) for text in array_keyboard))
+    await message.answer(text='Hello!', reply_markup=keyboard_markup)
+    analytic(message.from_user.username, message.from_user.id, message.from_user.full_name, message.text)
+
+# Start bot using func
+
 
